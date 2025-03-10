@@ -1,15 +1,20 @@
-import { Text, View } from "react-native";
+import { useState } from "react";
+import { View, Text, TextInput, Button} from "react-native";
 
-export default function Index() {
+
+//Defenir um objeto para armazenar os email e a password do utilizador
+export default function LoginScreen() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+
+  
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+    <View>
+      <Text>Email:</Text>
+      <TextInput value={email} onChangeText={setEmail} />
+      <Text>Senha:</Text>
+      <TextInput value={senha} onChangeText={setSenha} secureTextEntry />
+      <Button title="Entrar" />
     </View>
   );
 }
