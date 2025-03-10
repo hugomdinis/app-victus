@@ -20,7 +20,10 @@ export default function LoginScreen() {
 
       if (response.data.sucesso) {
         Alert.alert("Sucesso", response.data.mensagem);
-        router.push("/dashboard");
+        router.push({
+          pathname: "/dashboard",
+          params: { email }  // Passando o email para o dashboard
+        });
       } else {
         Alert.alert("Erro", response.data.mensagem);
       }
