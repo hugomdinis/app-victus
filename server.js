@@ -83,6 +83,34 @@ app.get("/dashboard/:email", (req, res) => {
   });
 });
 
+app.put('/user/update', (req, res) => {
+  const { email, name, password } = req.body;
+
+  if (!email || !name || !password) {
+    return res.status(400).json({ sucesso: false, mensagem: "Todos os campos são obrigatórios!" });
+  }
+
+  const query = `
+    UPDATE clients 
+    SET cli_name = ?, cli_password = ?
+    WHERE cli_email = ?
+  `;
+
+  db.query(query, [name, password, email], (err, result) => {
+    if (err) {
+      console.error("Erro ao atualizar os dados:", err);
+      return res.status(500).json({ sucesso: false, mensagem: "Erro ao atualizar os dados do usuário." });
+    }
+
+    if (result.affectedRows > 0) {
+      return res.json({ sucesso: true, mensagem: "Dados atualizados com sucesso." });
+    } else {
+      return res.json({ sucesso: false, mensagem: "Falha ao atualizar os dados." });
+    }
+  });
+});
+
+
 // Iniciar o servidor na porta 3000
 app.listen(3000, () => {
   console.log("Servidor roda na porta 3000");  // Mensagem indicando que o servidor está em execução
