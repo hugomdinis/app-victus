@@ -90,6 +90,7 @@ DROP TABLE IF EXISTS clientes;
 
 ## 3. Inserir 10 registros na tabela
 
+```bash
 INSERT INTO clientes (cli_name, cli_email, cli_cellphone, cli_password) VALUES
 ('Carlos Silva', 'carlos.silva@email.com', '912345678', 'senha123'),
 ('Ana Souza', 'ana.souza@email.com', '923456789', 'senha456'),
@@ -101,12 +102,17 @@ INSERT INTO clientes (cli_name, cli_email, cli_cellphone, cli_password) VALUES
 ('Juliana Freitas', 'juliana.freitas@email.com', '989012345', 'senhamno'),
 ('Pedro Henrique', 'pedro.henrique@email.com', '990123456', 'senhapqr'),
 ('Gabriela Martins', 'gabriela.martins@email.com', '901234567', 'senhastu');
+```
 
 ## 4 Verificar os registros inseridos
+
+```bash
 SELECT * FROM clientes;
+```
 
 ## 5. Criar a tabela de produtos
 
+```bash
 CREATE TABLE produtos (
     prod_id INT AUTO_INCREMENT PRIMARY KEY,
     prod_name VARCHAR(100) NOT NULL,
@@ -114,15 +120,17 @@ CREATE TABLE produtos (
     prod_price DECIMAL(10,2) NOT NULL,
     prod_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
+```
 
 ## 6. Excluir a tabela de produtos (caso precise reiniciar)
 
+```bash
 DROP TABLE IF EXISTS produtos;
-
+```
 
 ## 7. Inserir 10 registros na tabela de produtos
 
+```bash
 INSERT INTO produtos (prod_name, prod_desc, prod_price) VALUES
 ('Notebook Gamer', 'Notebook potente para jogos', 4500.00),
 ('Smartphone X', 'Celular de última geração', 3200.50),
@@ -134,15 +142,17 @@ INSERT INTO produtos (prod_name, prod_desc, prod_price) VALUES
 ('Impressora Multifuncional', 'Imprime, copia e digitaliza', 850.00),
 ('Tablet Pro', 'Tablet com caneta digital', 2800.00),
 ('HD Externo 1TB', 'Armazenamento portátil rápido', 450.00);
-
+```
 
 ## 8. Verificar os registros inseridos na tabela de produtos
 
+```bash
 SELECT * FROM produtos;
-
+```
 
 ## 9. Criar a tabela de subscrições
 
+```bash
 CREATE TABLE subscricoes (
     sub_id INT AUTO_INCREMENT PRIMARY KEY,
     client_id INT,
@@ -152,13 +162,17 @@ CREATE TABLE subscricoes (
     FOREIGN KEY (client_id) REFERENCES clientes(cli_id),
     FOREIGN KEY (product_id) REFERENCES produtos(prod_id)
 );
-
+```
 
 ## 10. Excluir a tabela de subscrições
-DROP TABLE IF EXISTS subscricoes;
 
+```bash
+DROP TABLE IF EXISTS subscricoes;
+```
 
 ## 11. Inserir 10 registros na tabela de subscriçõe
+
+```bash
 INSERT INTO subscricoes (client_id, product_id, start_date, end_date) VALUES
 (1, 2, '2024-01-01', '2024-12-31'),
 (2, 4, '2024-02-15', '2025-02-15'),
@@ -170,8 +184,10 @@ INSERT INTO subscricoes (client_id, product_id, start_date, end_date) VALUES
 (8, 5, '2024-08-15', '2025-08-15'),
 (9, 7, '2024-09-10', '2025-09-10'),
 (10, 9, '2024-10-05', '2025-10-05');
-
+```
 
 ## 12. Verificar os registros inseridos na tabela de subscrições
 
+```bash
 SELECT * FROM subscricoes;
+```
