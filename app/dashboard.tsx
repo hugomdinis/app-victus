@@ -2,118 +2,128 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { useRoute, RouteProp } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native'; // Corrigido import
-import Icon from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native'; // Hook para navegação entre telas
+import Icon from 'react-native-vector-icons/Feather'; // Ícones para a interface
 
-// Definindo a interface para os parâmetros da rota, com 'email' sendo um parâmetro
+// Define a interface dos parâmetros da rota, garantindo que 'email' esteja presente
 interface DashboardRouteParams {
   email: string;
 }
 
-// Definindo a interface para o tipo do produto, contendo o nome e descrição
+// Define a estrutura dos produtos que serão exibidos no dashboard
 interface Produto {
-  prod_name: string; 
-  prod_desc: string; 
+  prod_name: string; // Nome do produto
+  prod_desc: string; // Descrição do produto
 }
 
-// Tipando a rota para garantir que o parâmetro 'email' estará disponível
+// Tipagem da rota, assegurando que 'Dashboard' recebe um parâmetro 'email'
 type DashboardScreenRouteProp = RouteProp<{ Dashboard: DashboardRouteParams }, 'Dashboard'>;
 
-// Importando o tipo correto do @react-navigation/stack
+// Importação do tipo correto para navegação
 import { StackNavigationProp } from '@react-navigation/stack';
 
-// Tipando a navegação corretamente
+// Define o tipo de navegação com as rotas disponíveis
 type DashboardScreenNavigationProp = StackNavigationProp<
-  { Dashboard: DashboardRouteParams; editProfile: { email: string } },
+  { Dashboard: DashboardRouteParams; editProfile: { email: string } }, // Define as telas disponíveis
   'Dashboard'
 >;
 
 const DashboardScreen: React.FC = () => {
-  const route = useRoute<DashboardScreenRouteProp>(); // Usando o hook 'useRoute' para acessar a rota
-  const { email } = route.params; // Extraímos o 'email' dos parâmetros
+  // Obtém os parâmetros da rota usando 'useRoute'
+  const route = useRoute<DashboardScreenRouteProp>();
+  const { email } = route.params; // Extrai o 'email' passado como parâmetro na navegação
+
+  // Estado para armazenar os produtos recebidos do servidor
   const [produtos, setProdutos] = useState<Produto[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [erro, setErro] = useState('');
+  const [loading, setLoading] = useState(true); // Estado para controlar o carregamento dos dados
+  const [erro, setErro] = useState(''); // Estado para armazenar mensagens de erro
 
-  // Tipando a navegação corretamente
-  const navigation = useNavigation<DashboardScreenNavigationProp>(); // Usando o hook 'useNavigation' com a tipagem correta
+  // Obtém o objeto de navegação com a tipagem correta
+  const navigation = useNavigation<DashboardScreenNavigationProp>();
 
-  // Definindo a opção do cabeçalho quando o componente for montado
+  // Configura o botão no cabeçalho quando o componente for montado
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity
-          onPress={() => navigation.navigate('editProfile', { email })} // Agora a navegação está tipada corretamente
+          onPress={() => navigation.navigate('editProfile', { email })} // Botão para editar perfil
           style={styles.headerIconContainer}
         >
-          <Icon name="settings" size={30} color="#000" />
+          <Icon name="settings" size={30} color="#000" /> {/* Ícone de configurações */}
         </TouchableOpacity>
       ),
     });
-  }, [navigation, email]); // O efeito será executado quando 'navigation' ou 'email' mudar
+  }, [navigation, email]); // Executa novamente se 'navigation' ou 'email' mudarem
 
+  // Faz a requisição dos produtos ao servidor quando o componente for carregado
   useEffect(() => {
     const fetchProdutos = async () => {
       try {
+        // Requisição à API para obter os produtos associados ao email
         const response = await axios.get(`http://10.0.2.2:3000/dashboard/${email}`);
+
         if (response.data.sucesso) {
-          setProdutos(response.data.dados); // Armazenando os produtos no estado
+          setProdutos(response.data.dados); // Armazena os produtos no estado
         } else {
-          setErro(response.data.mensagem);
+          setErro(response.data.mensagem); // Caso a resposta contenha um erro
         }
       } catch (error) {
-        setErro('Erro ao carregar os dados');
+        setErro('Erro ao carregar os dados'); // Erro genérico caso a requisição falhe
       } finally {
-        setLoading(false);
+        setLoading(false); // Indica que o carregamento terminou
       }
     };
 
-    fetchProdutos();
-  }, [email]); // Recarrega os dados caso o email mude
+    fetchProdutos(); // Executa a função ao montar o componente
+  }, [email]); // Reexecuta a requisição caso o email mude
 
+  // Exibe um indicador de carregamento enquanto os dados são buscados
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
+  // Caso haja um erro, exibe a mensagem na tela
   if (erro) {
-    return <Text>{erro}</Text>; // Exibindo o erro, caso ocorra
+    return <Text>{erro}</Text>;
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Produtos Subscritos</Text>
+      
+      {/* Lista os produtos utilizando a FlatList */}
       <FlatList
-        data={produtos} // Dados da lista de produtos
-        keyExtractor={(item) => item.prod_name} // Usando o nome do produto como chave
+        data={produtos} // Array de produtos recebido da API
+        keyExtractor={(item) => item.prod_name} // Define o nome do produto como chave única
         renderItem={({ item }) => (
           <View style={{ marginBottom: 20 }}>
             <Text>Produto: {item.prod_name}</Text>
             <Text>Descrição: {item.prod_desc}</Text>
           </View>
         )}
-        contentContainerStyle={styles.flatListContent} // Aplicando o estilo da lista
+        contentContainerStyle={styles.flatListContent} // Aplica estilos na lista
       />
     </View>
   );
 };
 
-// Estilos
+// Estilos para os componentes
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Faz a View ocupar todo o espaço disponível
-    padding: 20,
+    flex: 1, // Faz com que o componente ocupe todo o espaço disponível
+    padding: 20, // Adiciona margem interna
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: 24, // Tamanho do título
+    fontWeight: 'bold', // Deixa o texto em negrito
+    marginBottom: 20, // Adiciona um espaçamento abaixo do título
   },
   flatListContent: {
     flexGrow: 1, // Garante que a FlatList ocupe o restante do espaço
-    justifyContent: 'flex-start', // Garante que os itens da lista fiquem no topo
+    justifyContent: 'flex-start', // Mantém os itens no topo
   },
   headerIconContainer: {
-    marginRight: 20,
+    marginRight: 20, // Adiciona espaço entre o ícone e a borda
   },
 });
 

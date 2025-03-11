@@ -21,6 +21,11 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
     node server.js
    ```
+4. Start the php server
+
+   ```bash
+    php -S 0.0.0.0:3000 -t backend/api
+   ```
 
 In the output, you'll find options to open the app in a
 

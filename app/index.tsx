@@ -1,55 +1,50 @@
-import { useState } from "react";
-import { View, Text, TextInput, Button, Alert } from "react-native";
-import axios from "axios";
-import { router } from "expo-router";
+import { useState } from "react"; 
+import { View, Text, TextInput, Button, Alert } from "react-native"; 
+import { useRouter } from "expo-router"; 
 
+// Componente que representa a tela de login
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const router = useRouter(); // Hook para navegação entre telas
+  const [email, setEmail] = useState(""); // Estado para armazenar o email inserido pelo utilizador
+  const [senha, setSenha] = useState(""); // Estado para armazenar a senha inserido pelo utilizador
 
-  const handleLogin = async () => {
+  // Função que é chamada quando o utilizador pressiona o botão "Entrar"
+  const handleLogin = () => {
+    // Verifica se os campos de email e senha foram preenchidos
     if (!email || !senha) {
-      Alert.alert("Erro", "Preencha todos os campos!");
+      Alert.alert("Erro", "Preencha todos os campos!"); // Exibe um alerta caso algum campo esteja vazio
       return;
     }
 
-    try {
-      const response = await axios.post("http://10.0.2.2:3000/login", { email, senha });
-
-      console.log("Resposta do servidor:", response.data); // Debugging
-
-      if (response.data.sucesso) {
-        Alert.alert("Sucesso", response.data.mensagem);
-        router.push({
-          pathname: "/dashboard",
-          params: { email }  // Passando o email para o dashboard
-        });
-      } else {
-        Alert.alert("Erro", response.data.mensagem);
-      }
-    } catch (error) {
-      console.error("Erro na requisição:", error);
-      Alert.alert("Erro", "Falha na comunicação com o servidor");
-    }
+    // Redireciona o utilizador para a tela de verificação antes de finalizar o login
+    router.push({
+      pathname: "./verification", // Caminho para a tela de verificação
+      params: { email }, // Passa o email como parâmetro para a próxima tela
+    });
   };
 
   return (
     <View style={{ padding: 20 }}>
+      {/* Campo para o utilizador inserir o email */}
       <Text>Email:</Text>
       <TextInput
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        style={{ borderBottomWidth: 1, marginBottom: 10 }}
+        value={email} // O valor do input é controlado pelo estado 'email'
+        onChangeText={setEmail} // Atualiza o estado 'email' quando o utilizador digita
+        autoCapitalize="none" // Garante que o email não seja capitalizado automaticamente
+        keyboardType="email-address" // Define o tipo de teclado para formato de email
+        style={{ borderBottomWidth: 1, marginBottom: 10 }} // Estilo do campo de entrada
       />
+
+      {/* Campo para o utilizador inserir a senha */}
       <Text>Senha:</Text>
       <TextInput
-        value={senha}
-        onChangeText={setSenha}
-        secureTextEntry
-        style={{ borderBottomWidth: 1, marginBottom: 20 }}
+        value={senha} // O valor do input é controlado pelo estado 'senha'
+        onChangeText={setSenha} // Atualiza o estado 'senha' quando o utilizador digita
+        secureTextEntry // Oculta o texto inserido para proteger a senha
+        style={{ borderBottomWidth: 1, marginBottom: 20 }} // Estilo do campo de entrada
       />
+
+      {/* Botão para efetuar o login */}
       <Button title="Entrar" onPress={handleLogin} />
     </View>
   );
