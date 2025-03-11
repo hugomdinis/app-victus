@@ -37,8 +37,10 @@ Antes de começar, certifica-te de ter instalado:
    ```
 
 3. Iniciar o servidor PHP:
+
+   Aceder a pasta backend, de seguida a da api e executar o php
    ```bash
-   php -S 0.0.0.0:3000 -t backend/api
+   php -S 0.0.0.0:80
    ```
 
 ## Possíveis Erros e Soluções

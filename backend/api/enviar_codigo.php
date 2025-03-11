@@ -1,46 +1,78 @@
 <?php
-// Inclui o autoload do Composer para carregar automaticamente as dependências do projeto
-require __DIR__ . '/../vendor/autoload.php'; 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-// Importa a classe ApiClient da biblioteca Whapi
-use Whapi\ApiClient;
-// Permite que qualquer origem aceda a este script (CORS)
+require __DIR__ . '/vendor/autoload.php';
+
+use OpenAPI\Client\Configuration;
+use OpenAPI\Client\Api\MessagesApi;
+use OpenAPI\Client\Model\SenderText;
+
+// CORS handling
 header("Access-Control-Allow-Origin: *");
-// Permite apenas requisições do tipo POST
-header("Access-Control-Allow-Methods: POST");
-// Define o tipo de conteúdo da resposta como JSON
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Content-Type: application/json");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-// Lê os dados enviados pelo cliente no formato JSON e converte para um array associativo
-$data = json_decode(file_get_contents("php://input"), true);
-
-// Verifica se o campo 'telefone' foi enviado na requisição
-if (!isset($data['telefone'])) {
-    echo json_encode(["sucesso" => false, "mensagem" => "Número de telefone obrigatório"]);
-    exit; // Termina a execução do script
+// Handle preflight
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit;
 }
 
-// Obtém o número de telefone do utilizador a partir dos dados recebidos
-$telefone = $data['telefone'];
-// Chave de API para autenticação no serviço Whapi
-$apiKey = "4EZ7XWCd2QTP2PmL6wC3oZr2tuFH8jzt";
-// Cria uma instância do cliente da API Whapi
-$whapi = new ApiClient($apiKey);
-// Gera um código de verificação aleatório de 6 dígitos
-$codigo = rand(100000, 999999);
-// Mensagem que será enviada para o número de telefone do utilizador via WhatsApp
-$mensagem = "O seu código de verificação é: $codigo";
-// Envia a mensagem através da API Whapi
-$response = $whapi->sendTextMessage($telefone, $mensagem);
+try {
+    // Config
+    $config = Configuration::getDefaultConfiguration()
+        ->setApiKey('Authorization', '4EZ7XWCd2QTP2PmL6wC3oZr2tuFH8jzt')
+        ->setApiKeyPrefix('Authorization', 'Bearer')
+        ->setSSLVerification(false); // Apenas para desenvolvimento!
 
-// Verifica se a mensagem foi enviada com sucesso
-if ($response['success']) {
-    // Guarda o código de verificação num ficheiro dentro da pasta 'codigos', usando o telefone como nome do ficheiro
+    // API Instance
+    $apiInstance = new MessagesApi(null, $config);
+
+    // Input handling
+    $rawInput = file_get_contents("php://input");
+    $data = json_decode($rawInput, true);
+    
+    if (!$data || !isset($data['telefone'])) {
+        throw new Exception('Dados inválidos ou telefone ausente');
+    }
+
+    // Generate code
+    $telefone = preg_replace('/[^0-9]/', '', $data['telefone']);
+    $codigo = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
+    // Create message
+    $sender_text = new SenderText([
+        'to' => $telefone,
+        'body' => "Seu código de verificação é: $codigo",
+        'ephemeral' => 3600,
+        'view_once' => true,
+        'typing_time' => 2.0,
+        'no_link_preview' => false
+    ]);
+
+    // Send message
+    $result = $apiInstance->sendMessageText($sender_text);
+
+    // Save code (ensure directory exists)
+    if (!file_exists('codigos')) {
+        mkdir('codigos', 0755, true);
+    }
     file_put_contents("codigos/$telefone.txt", $codigo);
-    // Retorna uma resposta JSON indicando que o código foi enviado com sucesso
-    echo json_encode(["sucesso" => true, "mensagem" => "Código enviado"]);
-} else {
-    // Retorna uma resposta JSON indicando que houve um erro ao enviar o código
-    echo json_encode(["sucesso" => false, "mensagem" => "Erro ao enviar código"]);
+
+    echo json_encode([
+        "sucesso" => true,
+        "mensagem" => "Código enviado!",
+        "detalhes" => $result
+    ]);
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        "sucesso" => false,
+        "mensagem" => "Erro: " . $e->getMessage(),
+        "trace" => $e->getTraceAsString() // Apenas para desenvolvimento
+    ]);
 }
-?>

@@ -1,6 +1,5 @@
 {
-    "minimum-stability": "dev",
-    "require": {
-        "whapi/client": "^1.0"
+    "require-dev": {
+        "whapi-cloud/whatsapp-api-sdk-php": "dev-master"
     }
 }

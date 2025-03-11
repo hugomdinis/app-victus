@@ -1,7 +1,7 @@
 import { useState } from "react"; 
 import { View, Text, TextInput, Button, Alert } from "react-native"; // Componentes do React Native
 import axios from "axios"; // Biblioteca para fazer requisições HTTP
-import { useRouter, useLocalSearchParams } from "expo-router"; 
+import { useRouter} from "expo-router"; 
 
 // Componente da tela de verificação o telefone
 export default function VerificationScreen() {
@@ -9,6 +9,8 @@ export default function VerificationScreen() {
   const [telefone, setTelefone] = useState(""); // Estado para armazenar o telefone do usuário
   const [codigo, setCodigo] = useState(""); // Estado para armazenar o código recebido
   const [codigoEnviado, setCodigoEnviado] = useState(false); // Estado para controlar se o código foi enviado
+
+  const API_BASE = "http://10.0.2.2:80/backend/api/";
 
   // Função para enviar o código de verificação via API
   const enviarCodigo = async () => {
@@ -18,8 +20,11 @@ export default function VerificationScreen() {
     }
 
     try {
-      // Faz a requisição para o backend enviando o telefone
-      const response = await axios.post("http://10.0.2.2:3000/enviar_codigo.php", { telefone });
+      const fullNumber = `351${telefone}`; // Prefixo internacional
+      const response = await axios.post(
+        `${API_BASE}enviar_codigo.php`,
+        { telefone: fullNumber }
+      );
 
       if (response.data.sucesso) {
         Alert.alert("Sucesso", "Código enviado para o WhatsApp."); // Notifica o utilizador
@@ -41,7 +46,7 @@ export default function VerificationScreen() {
 
     try {
       // Faz a requisição para o backend enviando o telefone e o código inserido
-      const response = await axios.post("http://10.0.2.2:3000/validar_codigo.php", { telefone, codigo });
+      const response = await axios.post(`${API_BASE}validar_codigo.php`, { telefone, codigo });
 
       if (response.data.sucesso) {
         Alert.alert("Sucesso", "Código validado!"); // Notifica que a validação foi bem-sucedida
