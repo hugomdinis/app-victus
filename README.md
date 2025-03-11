@@ -50,6 +50,7 @@ cd backend
 composer install
 ```
 
+
 ### 2. Erro de conexão ao backend
 Se a aplicação React Native não conseguir conectar ao backend, verifica se está a usar `http://10.0.2.2:3000` para emuladores Android ou `http://localhost:3000` no browser.
 
@@ -58,15 +59,19 @@ Está me sempre a dar este erro e nao consigo corrigi-lo, já tentei várias sol
 
 
 # Configurar servidor mysql localmente
+
 Criar um conexao local com host:localhost e dar o nome a uma nova base de dados chamada victusapp, dar o nome de utilizador: root e a passe: hugo1234QWERTY
 
 
-## Escolher a base de dados
+## Escolher a base de dados Usar a database
 
-Usar a database USE victusapp;
+```bash
+USE victusapp;
+```
 
 ## 1. Criar a tabela
 
+```bash
 CREATE TABLE clientes (
     cli_id INT AUTO_INCREMENT PRIMARY KEY,
     cli_name VARCHAR(100) NOT NULL,
@@ -75,10 +80,13 @@ CREATE TABLE clientes (
     cli_password VARCHAR(255) NOT NULL,
     cli_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+```
 
 ## 2. Excluir a tabela (caso precise reiniciar)
 
+```bash
 DROP TABLE IF EXISTS clientes;
+```
 
 ## 3. Inserir 10 registros na tabela
 
