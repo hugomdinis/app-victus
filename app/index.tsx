@@ -18,14 +18,13 @@ export default function LoginScreen() {
 
     // Redireciona o utilizador para a tela de verificação antes de finalizar o login
     router.push({
-      pathname: "./verification", // Caminho para a tela de verificação
+      pathname: "./dashboard", // Caminho para a tela de dasboard, para ir para a de verificacao é só alterar para ./verification, esta a dashboard pois a api nao esta a funcionar 
       params: { email }, // Passa o email como parâmetro para a próxima tela
     });
   };
 
   return (
     <View style={{ padding: 20 }}>
-      {/* Campo para o utilizador inserir o email */}
       <Text>Email:</Text>
       <TextInput
         value={email} // O valor do input é controlado pelo estado 'email'
@@ -35,7 +34,6 @@ export default function LoginScreen() {
         style={{ borderBottomWidth: 1, marginBottom: 10 }} // Estilo do campo de entrada
       />
 
-      {/* Campo para o utilizador inserir a senha */}
       <Text>Senha:</Text>
       <TextInput
         value={senha} // O valor do input é controlado pelo estado 'senha'
@@ -44,7 +42,6 @@ export default function LoginScreen() {
         style={{ borderBottomWidth: 1, marginBottom: 20 }} // Estilo do campo de entrada
       />
 
-      {/* Botão para efetuar o login */}
       <Button title="Entrar" onPress={handleLogin} />
     </View>
   );

@@ -65,7 +65,6 @@ export default function VerificationScreen() {
       />
       <Button title="Enviar Código" onPress={enviarCodigo} />
 
-      {/* Exibe o campo para inserir o código, apenas se o código já foi enviado */}
       {codigoEnviado && (
         <>
           <Text>Digite o código recebido:</Text>

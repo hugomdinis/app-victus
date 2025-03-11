@@ -42,10 +42,8 @@ const EditProfileScreen: React.FC = () => {
 
   return (
     <View style={{ padding: 20 }}> 
-      {/* Título da página */}
       <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>Editar Perfil</Text>
 
-      {/* Campo para inserir o novo nome */}
       <Text>Nome:</Text>
       <TextInput
         value={name} // Define o valor do input como o estado 'name'
@@ -53,7 +51,7 @@ const EditProfileScreen: React.FC = () => {
         style={{ borderBottomWidth: 1, marginBottom: 10 }} // Estilo do campo de entrada
       />
 
-      {/* Campo para inserir a nova senha */}
+
       <Text>Nova Senha:</Text>
       <TextInput
         value={password} // Define o valor do input como o estado 'password'
@@ -62,7 +60,6 @@ const EditProfileScreen: React.FC = () => {
         style={{ borderBottomWidth: 1, marginBottom: 20 }} // Estilo do campo de entrada
       />
 
-      {/* Botão para atualizar os dados */}
       <Button title="Atualizar" onPress={handleUpdate} />
     </View>
   );

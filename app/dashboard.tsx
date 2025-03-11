@@ -91,7 +91,6 @@ const DashboardScreen: React.FC = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Produtos Subscritos</Text>
       
-      {/* Lista os produtos utilizando a FlatList */}
       <FlatList
         data={produtos} // Array de produtos recebido da API
         keyExtractor={(item) => item.prod_name} // Define o nome do produto como chave única
