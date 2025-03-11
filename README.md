@@ -1,61 +1,58 @@
-# Welcome to your Expo app 👋
+# Expo Router App - Guia de Instalação e Uso
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Este é um projeto desenvolvido com [Expo](https://expo.dev) e [React Native](https://reactnative.dev/). Ele inclui um backend em PHP para autenticação e comunicação com um servidor.
 
-## Get started
+## Pré-requisitos
 
-1. Install dependencies
+Antes de começar, certifica-te de ter instalado:
 
+- [Node.js](https://nodejs.org/) e npm
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- [PHP](https://www.php.net/downloads)
+- Composer (caso o backend use dependências externas)
+
+## Instalação
+
+1. Instalar as dependências do projeto:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+2. Instalar as dependências do backend:
    ```bash
-    npx expo start
+   cd backend
+   composer install
    ```
 
-3. Start the servr.js
+## Execução do Projeto
 
+1. Iniciar a aplicação Expo:
    ```bash
-    node server.js
-   ```
-4. Start the php server
-
-   ```bash
-    php -S 0.0.0.0:3000 -t backend/api
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+2. Iniciar o servidor Node.js :
+   ```bash
+   node server.js
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+3. Iniciar o servidor PHP:
+   ```bash
+   php -S 0.0.0.0:3000 -t backend/api
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Possíveis Erros e Soluções
 
-## Get a fresh project
-
-When you're ready, run:
-
+### 1. Erro `vendor/autoload.php` não encontrado
+Se ao iniciar o servidor PHP aparecer um erro relacionado ao `vendor/autoload.php`, corre o seguinte comando:
 ```bash
-npm run reset-project
+cd backend
+composer install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Erro de conexão ao backend
+Se a aplicação React Native não conseguir conectar ao backend, verifica se está a usar `http://10.0.2.2:3000` para emuladores Android ou `http://localhost:3000` no browser.
 
-## Learn more
+### 3. Erro `404 - No such file or directory`
+Está me sempre a dar este erro e nao consigo corrigi-lo, já tentei várias soluções e nenhuma funcionou.
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
