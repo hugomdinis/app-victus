@@ -167,7 +167,3 @@ INSERT INTO subscricoes (client_id, product_id, start_date, end_date) VALUES
 ## 12. Verificar os registros inseridos na tabela de subscrições
 
 SELECT * FROM subscricoes;
-
-
-
-
