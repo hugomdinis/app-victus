@@ -18,7 +18,7 @@ export default function LoginScreen() {
 
     // Redireciona o utilizador para a tela de verificação antes de finalizar o login
     router.push({
-      pathname: "./verification", // Caminho para a tela de dasboard, para ir para a de verificacao é só alterar para ./verification, esta a dashboard pois a api nao esta a funcionar 
+      pathname: "./dashboard", // Caminho para a tela de dasboard, para ir para a de verificacao é só alterar para ./verification, esta a dashboard pois a api nao esta a funcionar 
       params: { email }, // Passa o email como parâmetro para a próxima tela
     });
   };
