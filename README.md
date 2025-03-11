@@ -60,7 +60,14 @@ Está me sempre a dar este erro e nao consigo corrigi-lo, já tentei várias sol
 
 # Configurar servidor mysql localmente
 
-Criar um conexao local com host:localhost e dar o nome a uma nova base de dados chamada victusapp, dar o nome de utilizador: root e a passe: hugo1234QWERTY
+
+Criar um conexao local com 
+host:localhost 
+e dar o nome a uma nova base de dados chamada 
+database: victusapp 
+utilizador: root 
+passe: hugo1234QWERTY
+
 
 
 ## Escolher a base de dados Usar a database
